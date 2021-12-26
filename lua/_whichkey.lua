@@ -60,7 +60,7 @@ local which_key = {
 		["h"] = { ":nohlsearch<CR>", "No Highlight" },
 		b = {
 			name = "Buffers",
-		  l = { ":Telescope buffers<CR>", "List Buffers" },
+			l = { ":Telescope buffers<CR>", "List Buffers" },
 			b = { ":b#<cr>", "Previous" },
 			d = { ":bd<cr>", "Delete" },
 			f = { ":Telescope buffers <cr>", "Find" },
@@ -78,18 +78,19 @@ local which_key = {
 		},
 		l = {
 			name = "LSP",
-			a = { "<cmd>Telescope lsp_code_actions<cr>", "Code Action" },
+			a = { ":Telescope lsp_code_actions<cr>", "Code Action" },
 			d = {
-				"<cmd>Telescope lsp_document_diagnostics<cr>",
+				":Telescope lsp_document_diagnostics<cr>",
 				"Document Diagnostics",
 			},
 			w = {
-				"<cmd>Telescope diagnostics<cr>",
+				":Telescope diagnostics<cr>",
 				"Workspace Diagnostics",
 			},
-			f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format" },
-			i = { "<cmd>LspInfo<cr>", "Info" },
-			I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
+			f = { ":lua vim.lsp.buf.formatting()<cr>", "Format" },
+			i = { ":LspInfo<cr>", "Info" },
+			I = { ":LspInstallInfo<cr>", "Installer Info" },
+			r = { ":lua vim.lsp.buf.rename()<cr>", "Rename" },
 		},
 		s = {
 			name = "Search",
