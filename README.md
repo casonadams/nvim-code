@@ -70,29 +70,11 @@ colors:
 ## Lazy loading
 
 - Note this setup is configured for lazy loading of plugins. Meaning plugins
-  won't be used unless the filetype matches with settings in the `after/ftplugin`
-  dir. It has its cons opening a `markdown` file and then `:e rustfile` won't
-  enable lsp for rust file. To get around this put all null-ls config in
-  `after/ftplugin/` config into `lua/_null-ls.lua` and require that in`init.lua`
-
-```lua
-local null_ls = require("null-ls")
-
-local sources = {
-	null_ls.builtins.formatting.stylua,
-	null_ls.builtins.formatting.black,
-	null_ls.builtins.formatting.prettier,
-	null_ls.builtins.formatting.shfmt.with({
-		extra_args = { "-i", "2", "-bn", "-ci", "-sr" },
-	}),
-
-	null_ls.builtins.diagnostics.shellcheck,
-	null_ls.builtins.diagnostics.markdownlint,
-	null_ls.builtins.diagnostics.eslint,
-}
-
-null_ls.setup({ sources = sources })
-```
+  won't be used unless the filetype matches with settings in the
+  `after/ftplugin` dir. It has its cons opening a `markdown` file and then
+  `:e rustfile` won't enable lsp for rust file. To get around this put all
+  null-ls config in `after/ftplugin/` config into `lua/_null-ls.lua` and require
+  that in`init.lua`
 
 ## Install language servers
 
