@@ -17,7 +17,7 @@ Open `nvim` and install and update plugins with `:PackerSync` Close and reopen
   wont be used unless the filetype matches with settings in the `after/ftplugin`
   dir. It has its cons opening a `markdown` file and then `:e rustfile` won't
   enable lsp for rust file. To get around this put all
-  `after/ftplugin/ config into `lua/\_custom.lua`and require that in`init.lua`
+  `after/ftplugin/ config into `lua/_custom.lua`and require that in`init.lua`
 
 ```lua
 local null_ls = require("null-ls")
