@@ -13,7 +13,7 @@ Open `nvim` and install and update plugins with `:PackerSync` Close and reopen
 
 ## colorscheme
 
-[walh-shell](https://github.com/casonadams/walh-shell.zsh) setups up addional
+[alacritty-shell](https://github.com/casonadams/alacritty-shell) setups up addional
 colors in the terminal. Index 18 is used for the statusline background, and
 Index 16 is used for orange in some color schemes for `walh`. This can get setup
 using [alacritty](https://github.com/alacritty/alacritty),
