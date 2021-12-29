@@ -1,8 +1,3 @@
-local utils_ok, utils = require("utils")
-if not utils_ok then
-  return
-end
-
 local cmp_ok, cmp = pcall(require, "cmp")
 if not cmp_ok then
   return
