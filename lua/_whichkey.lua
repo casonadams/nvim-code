@@ -132,26 +132,23 @@ local which_key = {
   },
 }
 
-utils.mapping("n", "H", ":bp<CR>")
-utils.mapping("n", "gt", ":bp<CR>")
-utils.mapping("n", "L", ":bn<CR>")
-utils.mapping("n", "<tab>", ":tabnext<CR>")
-utils.mapping("n", "<S-tab>", ":tabprevious<CR>")
-utils.mapping("n", "<C-h>", ":wincmd h<CR>")
-utils.mapping("n", "<C-j>", ":wincmd j<CR>")
-utils.mapping("n", "<C-k>", ":wincmd k<CR>")
-utils.mapping("n", "<C-l>", ":wincmd l<CR>")
-utils.mapping("t", "<Esc>", "<C-\\><C-n>")
+-- local function map(mode, lhs, rhs, opts)
+--   local options = { noremap = true, silent = true }
+--   if opts then
+--     options = vim.tbl_extend("force", options, opts)
+--   end
+--   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+-- end
 
-utils.mapping("n", "ga", "lua vim.lsp.buf.code_action()")
-utils.mapping("n", "gD", "lua vim.lsp.buf.declaration()")
-utils.mapping("n", "gd", "lua vim.lsp.buf.definition()")
-utils.mapping("n", "ge", "lua vim.lsp.diagnostic.goto_next()")
-utils.mapping("n", "gE", "lua vim.lsp.diagnostic.goto_prev()")
-utils.mapping("n", "gi", "lua vim.lsp.buf.implementation()")
-utils.mapping("n", "gr", "lua vim.lsp.buf.references()")
-utils.mapping("n", "K", "lua vim.lsp.buf.hover()")
-utils.mapping("n", "gl", "lua vim.lsp.diagnostic.show_line_diagnostics()")
+utils.map("n", "H", ":bp<CR>")
+utils.map("n", "L", ":bn<CR>")
+utils.map("n", "<tab>", ":tabnext<CR>")
+utils.map("n", "<S-tab>", ":tabprevious<CR>")
+utils.map("n", "<C-h>", ":wincmd h<CR>")
+utils.map("n", "<C-j>", ":wincmd j<CR>")
+utils.map("n", "<C-k>", ":wincmd k<CR>")
+utils.map("n", "<C-l>", ":wincmd l<CR>")
+utils.map("t", "<Esc>", "<C-\\><C-n>")
 
 local wk = require("which-key")
 wk.setup(which_key.setup)

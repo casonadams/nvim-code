@@ -1,3 +1,8 @@
+local utils_ok, utils = pcall(require, "utils")
+if not utils_ok then
+  return
+end
+
 local cmp_ok, cmp = pcall(require, "cmp")
 if not cmp_ok then
   return
@@ -81,6 +86,15 @@ cmp.setup({
 local on_attach = function(client)
   lsp_status.register_progress()
   lsp_status.on_attach(client)
+  utils.bufmap("n", "ga", "lua vim.lsp.buf.code_action()")
+  utils.bufmap("n", "gD", "lua vim.lsp.buf.declaration()")
+  utils.bufmap("n", "gd", "lua vim.lsp.buf.definition()")
+  utils.bufmap("n", "ge", "lua vim.lsp.diagnostic.goto_next()")
+  utils.bufmap("n", "gE", "lua vim.lsp.diagnostic.goto_prev()")
+  utils.bufmap("n", "gi", "lua vim.lsp.buf.implementation()")
+  utils.bufmap("n", "gr", "lua vim.lsp.buf.references()")
+  utils.bufmap("n", "K", "lua vim.lsp.buf.hover()")
+  utils.bufmap("n", "gl", "lua vim.lsp.diagnostic.show_line_diagnostics()")
 end
 
 -- Provide settings first!

@@ -2,11 +2,17 @@ local utils = {}
 local api = vim.api
 local fn = vim.fn
 
-function utils.mapping(mode, key, result)
-  vim.api.nvim_buf_set_keymap(0, mode, key, "<cmd> " .. result .. "<cr>", {
-    noremap = true,
-    silent = true,
-  })
+function utils.bufmap(mode, key, result)
+  local opts = { noremap = true, silent = true }
+  vim.api.nvim_buf_set_keymap(0, mode, key, "<cmd> " .. result .. "<cr>", opts)
+end
+
+function utils.map(mode, lhs, rhs, opts)
+  local options = { noremap = true, silent = true }
+  if opts then
+    options = vim.tbl_extend("force", options, opts)
+  end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
 function utils.extract_highlight_colors(color_group, scope, cterm_color)
