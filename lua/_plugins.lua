@@ -1,7 +1,7 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({
+  Packer_Bootstrap = fn.system({
     "git",
     "clone",
     "--depth",
@@ -17,48 +17,57 @@ if not packer_ok then
 end
 return packer.startup(function()
   use({
-    "L3MON4D3/LuaSnip",
+    "wbthomason/packer.nvim",
+    "dstein64/vim-startuptime",
+    "lewis6991/impatient.nvim",
+
     "casonadams/walh",
-    "folke/trouble.nvim",
+    "b3nj5m1n/kommentary",
+    "folke/which-key.nvim",
+
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-path",
     "hrsh7th/nvim-cmp",
+
     "jose-elias-alvarez/null-ls.nvim",
     "neovim/nvim-lspconfig",
-    "nvim-lua/lsp-status.nvim",
-    "nvim-treesitter/nvim-treesitter",
-    "saadparwaiz1/cmp_luasnip",
     "tamago324/nlsp-settings.nvim",
-    "wbthomason/packer.nvim",
     "williamboman/nvim-lsp-installer",
-    "rafamadriz/friendly-snippets",
+
+    "kyazdani42/nvim-web-devicons",
+
+    "nvim-treesitter/nvim-treesitter",
+    "pacha/vem-tabline",
+    "mhinz/vim-sayonara",
   })
   use({
     "nvim-telescope/telescope.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
+    requires = {
+      { "nvim-lua/plenary.nvim" },
+      { "ANGkeith/telescope-terraform-doc.nvim" },
+    },
   })
   use({
-    "nvim-lualine/lualine.nvim",
-    requires = { "kyazdani42/nvim-web-devicons", opt = true },
-  })
-  use({
-    "folke/which-key.nvim",
+    "j-hui/fidget.nvim",
     config = function()
-      require("which-key").setup({})
-    end,
-  })
-  use({
-    "terrortylor/nvim-comment",
-    config = function()
-      require("nvim_comment").setup({})
+      require("fidget").setup({
+        timer = {
+          spinner_rate = 40,
+          fidget_decay = 0,
+          task_decay = 0,
+        },
+      })
     end,
   })
   use({
     "lewis6991/gitsigns.nvim",
     config = function()
-      require("gitsigns").setup({ yadm = { enable = true } })
+      require("gitsigns").setup({
+        numhl = true,
+        yadm = { enable = false },
+      })
     end,
   })
   use({
@@ -72,9 +81,22 @@ return packer.startup(function()
       })
     end,
   })
+  use({
+    "kyazdani42/nvim-tree.lua",
+    requires = { "kyazdani42/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup({})
+    end,
+  })
+  use({
+    "ur4ltz/surround.nvim",
+    config = function()
+      require("surround").setup({ mappings_style = "surround" })
+    end,
+  })
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
-  if packer_bootstrap then
+  if Packer_Bootstrap then
     require("packer").sync()
   end
 end)

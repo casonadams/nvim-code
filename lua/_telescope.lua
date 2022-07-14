@@ -3,24 +3,29 @@ if not telescope_ok then
   return
 end
 
-local trouble_ok, trouble = pcall(require, "trouble")
-if not trouble_ok then
-  return
-end
+telescope.load_extension("terraform_doc")
 
 telescope.setup({
   defaults = {
-    border = true,
+    border = false,
     layout_strategy = "bottom_pane",
     layout_config = {
-      height = 0.30,
+      height = 0.33,
       width = 1.00,
+    },
+    pickers = {
+      find_files = {
+        find_command = { "fd", "--type", "f", "--strip-cwd-prefix" }
+      },
     },
     -- path_display = { "shorten" },
     sorting_strategy = "ascending",
+    mappings = {
+      i = {
+        ["<C-h>"] = "which_key",
+        ["<Tab>"] = "move_selection_next",
+        ["<S-Tab>"] = "move_selection_previous",
+      },
+    },
   },
-})
-
-trouble.setup({
-  icons = false,
 })

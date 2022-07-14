@@ -1,13 +1,12 @@
+pcall(require, "impatient")
 require("_options")
 require("_plugins")
 require("_lsp")
-require("_treesitter")
-require("_telescope")
-require("_whichkey")
 require("_null-ls")
+require("_telescope")
+require("_treesitter")
+require("_kommentary")
 require("_terminal")
+require("_whichkey")
 
-vim.cmd("colorscheme walh-gruvbox")
-
--- important to import after colorscheme
-require("_statusline")
+vim.cmd("colorscheme walh-default")

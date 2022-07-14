@@ -3,11 +3,7 @@ local opt = vim.opt
 local fn = vim.fn
 
 g.mapleader = " "
-
 g.border_style = "rounded"
-g.markdown_fenced_languages = {
-  "bash=sh",
-}
 
 opt.backup = false -- creates a backup file
 opt.clipboard = "" -- don't use clipboard
@@ -22,7 +18,7 @@ opt.foldexpr = "" -- set to "nvim_treesitter#foldexpr()" for treesitter based fo
 opt.foldmethod = "manual" -- folding set to "expr" for treesitter based folding
 opt.hidden = true -- required to keep multiple buffers and open multiple buffers
 opt.hlsearch = true -- highlight all matches on previous search pattern
-opt.ignorecase = true -- ignore case in search patterns
+opt.ignorecase = false -- ignore case in search patterns
 opt.laststatus = 2 -- hide statusline
 opt.listchars = "tab:│ ,trail:·,nbsp:+"
 opt.list = true
@@ -36,7 +32,7 @@ opt.shiftwidth = 2 -- the number of spaces inserted for each indentation
 opt.showmode = false -- we don't need to see things like -- INSERT -- anymore
 opt.showtabline = 2 -- always show tabs
 opt.sidescrolloff = 4
-opt.signcolumn = "yes" -- always show the sign column otherwise it would shift the text each time
+opt.signcolumn = "no" -- yes, no, number
 opt.smartcase = true -- smart case
 opt.smartindent = true -- make indenting smarter again
 opt.spell = false -- disable spell checking
@@ -49,8 +45,12 @@ opt.termguicolors = false -- set term gui colors (most terminals support this)
 opt.timeoutlen = 500 -- timeout length
 opt.titlestring = "%<%F - nvim" -- what the title of the window will be set to
 opt.title = true -- set the title of window to the value of the titlestring
-opt.undodir = fn.stdpath("cache") .. "/undo"
+-- opt.undodir = fn.stdpath("cache") .. "/undo"
+opt.undodir = "/tmp"
 opt.undofile = true -- enable persistent undo
 opt.updatetime = 300 -- faster completion
 opt.wrap = true -- display lines as one long line
 opt.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program) it is not allowed to be edited
+
+g.netrw_liststyle = 3
+g.netrw_banner = 0

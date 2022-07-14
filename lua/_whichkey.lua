@@ -27,29 +27,21 @@ local which_key = {
     window = {
       border = "none", -- none, single, double, shadow
       position = "bottom", -- bottom, top
-      margin = { 1, 0, 1, 0 },
-      padding = { 2, 2, 2, 2 },
+      margin = { 0, 0, 1, 0 },
+      padding = { 1, 1, 1, 1 },
     },
     layout = {
-      height = { min = 4, max = 25 },
+      height = { min = 1, max = 25 },
       width = { min = 20, max = 50 },
       spacing = 3,
+      align = "center",
     },
     hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " },
     show_help = true,
   },
-
   opts = {
     mode = "n",
-    prefix = "<leader>",
-    buffer = nil,
-    silent = true,
-    noremap = true,
-    nowait = true,
-  },
-  vopts = {
-    mode = "v",
-    prefix = "<leader>",
+    prefix = "",
     buffer = nil,
     silent = true,
     noremap = true,
@@ -57,33 +49,42 @@ local which_key = {
   },
   -- NOTE: Prefer using : over <cmd> as the latter avoids going back in normal-mode.
   -- see https://neovim.io/doc/user/map.html#:map-cmd
-  vmappings = {},
   mappings = {
-    ["c"] = { ":BufferClose!<CR>", "Close Buffer" },
-    ["e"] = { ":Telescope file_browser <CR>", "File Browser" },
-    ["f"] = { ":Telescope find_files <CR>", "Find File" },
-    ["h"] = { ":nohlsearch<CR>", "No Highlight" },
-    b = {
+    ["<leader>f"] = { utils.find_project_files, "Find File" },
+    -- ["<leader>e"] = { ":Lexplore! 33<CR>", "File Browser" },
+    ["<leader>e"] = { ":NvimTreeToggle<CR>", "File Browser" },
+    ["<leader>h"] = { ":nohlsearch<CR>", "No Highlight" },
+    -- ["H"] = { ":bp<CR>", "Buffer Previous" },
+    -- ["L"] = { ":bn<CR>", "Buffer Next" },
+    ["H"] = { "<Plug>vem_prev_buffer-", "Buffer Previous" },
+    ["L"] = { "<Plug>vem_next_buffer-", "Buffer Next" },
+    -- ["<leader>x"] = { "<Plug>vem_delete_buffer-", "Buffer Delete" },
+    ["<leader>x"] = { ":Sayonara!<cr>", "Buffer Delete" },
+    ["<leader>z"] = { ":call WindowZoom()<cr>", "Toggle Zoom" },
+    ["<leader>o"] = { ":wincmd w<cr>", "Next window" },
+    ["gd"] = { ":lua vim.lsp.buf.definition()<cr>", "jumpDefinition" },
+    ["ga"] = { ":lua vim.lsp.buf.code_action()<cr>", "diagnosticInfo" },
+    ["K"] = { ":lua vim.lsp.buf.hover()<cr>", "doHover" },
+    ["gl"] = { ":lua vim.diagnostic.open_float()<cr>", "diagnosticInfo" },
+
+    ["<leader>t"] = {
+      name = "Terminal",
+      ["%"] = { ":vsplit term://${SHELL}<CR>", "Open TERM right" },
+      ['"'] = { ":split term://${SHELL}<CR>", "Open TERM down" },
+    },
+    ["<leader>b"] = {
       name = "Buffers",
       l = { ":Telescope buffers<CR>", "List Buffers" },
-      b = { ":b#<cr>", "Previous" },
+      b = { ":b#<cr>", "Last" },
       d = { ":bd<cr>", "Delete" },
       f = { ":Telescope buffers <cr>", "Find" },
       n = { ":bn<cr>", "Next" },
       p = { ":bp<cr>", "Previous" },
     },
-    p = {
-      name = "Packer",
-      c = { ":PackerCompile<cr>", "Compile" },
-      i = { ":PackerInstall<cr>", "Install" },
-      r = { ":lua require('lvim.utils').reload_lv_config()<cr>", "Reload" },
-      s = { ":PackerSync<cr>", "Sync" },
-      S = { ":PackerStatus<cr>", "Status" },
-      u = { ":PackerUpdate<cr>", "Update" },
-    },
-    l = {
+    ["<leader>l"] = {
       name = "LSP",
-      a = { ":Telescope lsp_code_actions<cr>", "Code Action" },
+      a = { ":lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+      -- a = { ":Telescope lsp_code_actions<cr>", "Code Action" },
       d = {
         ":Telescope lsp_document_diagnostics<cr>",
         "Document Diagnostics",
@@ -97,7 +98,8 @@ local which_key = {
       I = { ":LspInstallInfo<cr>", "Installer Info" },
       r = { ":lua vim.lsp.buf.rename()<cr>", "Rename" },
     },
-    s = {
+
+    ["<leader>s"] = {
       name = "Search",
       b = { ":Telescope git_branches <cr>", "Checkout branch" },
       c = { ":Telescope colorscheme <cr>", "Colorscheme" },
@@ -116,51 +118,21 @@ local which_key = {
         "Colorscheme with Preview",
       },
     },
-    T = {
-      name = "Treesitter",
-      i = { ":TSConfigInfo<cr>", "Info" },
-    },
-    t = {
-      name = "Diagnostics",
-      t = { "<cmd>TroubleToggle<cr>", "trouble" },
-      w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
-      d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
-      q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
-      l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
-      r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
-    },
   },
 }
 
--- local function map(mode, lhs, rhs, opts)
---   local options = { noremap = true, silent = true }
---   if opts then
---     options = vim.tbl_extend("force", options, opts)
---   end
---   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
--- end
-
-utils.map("n", "H", ":bp<CR>")
-utils.map("n", "L", ":bn<CR>")
-utils.map("n", "<tab>", ":tabnext<CR>")
-utils.map("n", "<S-tab>", ":tabprevious<CR>")
-utils.map("n", "<C-h>", ":wincmd h<CR>")
-utils.map("n", "<C-j>", ":wincmd j<CR>")
-utils.map("n", "<C-k>", ":wincmd k<CR>")
-utils.map("n", "<C-l>", ":wincmd l<CR>")
-utils.map("t", "<Esc>", "<C-\\><C-n>")
+utils.map("t", "<esc>", "<C-\\><C-n>")
+-- utils.map("i", "<Tab>", 'v:lua.smart_tab("down")', { expr = true })
+-- utils.map("i", "<S-Tab>", 'v:lua.smart_tab("up")', { expr = true })
+-- utils.map("i", "<cr>", "v:lua.smart_enter()", { expr = true })
 
 local wk = require("which-key")
 wk.setup(which_key.setup)
 
 local opts = which_key.opts
-local vopts = which_key.vopts
-
 local mappings = which_key.mappings
-local vmappings = which_key.vmappings
 
 wk.register(mappings, opts)
-wk.register(vmappings, vopts)
 
 if which_key.on_config_done then
   which_key.on_config_done(wk)

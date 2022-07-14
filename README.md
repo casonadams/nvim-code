@@ -5,8 +5,32 @@ VSCode alternative that is blazing fast
 ## quick start
 
 ```sh
-git clone git@github.com:casonadams/nvim-code.git ~/.config/nvim
+git clone git@github.com:casonadams/nvim-code.git ~/.config/nvim-code
 ```
+
+### create linker script
+
+`~/.local/bin/nvim-code`
+
+- Backs up current ~/.config/nvim dir
+- Creates sym link to cloned repo and nvim
+
+```sh
+#!/usr/bin/env bash
+
+export NVIM_CONFIG="${NVIM_CONFIG:-${HOME}/.config/nvim-code}"
+
+mv ${HOME}/.config/nvim ${HOME}/.config/nvim.bak
+ln -sf ${NVIM_CONFIG} ${HOME}/.config/nvim
+exec nvim -u "${NVIM_CONFIG}/init.lua" "$@"
+``
+`chmod +x ~/.local/bin/nvim-code`
+
+### run linker script
+
+`~/.local/bin/nvim-code`
+
+### install packages
 
 Open `nvim` and install and update plugins with `:PackerSync` Close and reopen
 `nvim` to install `treesitter` settings
@@ -76,6 +100,8 @@ colors:
   null-ls config in `after/ftplugin/` config into `lua/_null-ls.lua` and require
   that in`init.lua`
 
+- Have a look at lua/_null-ls.lua for some examples (when using null-ls you will need to download the required applications for it to work)
+
 ## Install language servers
 
 `:LspInstallInfo`
@@ -102,3 +128,7 @@ colors:
 | Normal mode `K`         | Show doc hover            |
 | Normal mode `Space lf`  | Format command            |
 | Normal mode `Space lr`  | Rename command            |
+| Normal mode `Space x`   | Keep layout remove buffer |
+| Normal mode `Space t %` | Open terminal vsplit      |
+| Normal mode `Space t "` | Open terminal split       |
+| Normal mode `Space z`   | Toggle zoom               |

@@ -2,6 +2,37 @@ local utils = {}
 local api = vim.api
 local fn = vim.fn
 
+local builtin_ok, builtin = pcall(require, "telescope.builtin")
+if not builtin_ok then
+  return
+end
+
+local function t(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+function _G.smart_tab(direction)
+  if direction == "down" then
+    return vim.fn.pumvisible() == 1 and t("<C-n>") or t("<Tab>")
+  else
+    return vim.fn.pumvisible() == 1 and t("<C-p>") or t("<S-Tab>")
+  end
+end
+function _G.smart_enter()
+  return vim.fn.pumvisible() == 1 and t("<C-y>") or t("<cr>")
+end
+
+function utils.smart_tab(direction)
+  if direction == "down" then
+    return vim.fn.pumvisible() == 1 and t("<C-n>") or t("<Tab>")
+  else
+    return vim.fn.pumvisible() == 1 and t("<C-p>") or t("<S-Tab>")
+  end
+end
+function utils.smart_enter()
+  return vim.fn.pumvisible() == 1 and t("<C-y>") or t("<cr>")
+end
+
 function utils.bufmap(mode, key, result)
   local opts = { noremap = true, silent = true }
   vim.api.nvim_buf_set_keymap(0, mode, key, "<cmd> " .. result .. "<cr>", opts)
@@ -45,6 +76,14 @@ function utils.extract_highlight_colors(color_group, scope, cterm_color)
     return color[scope]
   end
   return color
+end
+
+function utils.find_project_files()
+  local ok = pcall(builtin.git_files)
+
+  if not ok then
+    builtin.find_files()
+  end
 end
 
 return utils

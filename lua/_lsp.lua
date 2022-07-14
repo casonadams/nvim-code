@@ -8,11 +8,6 @@ if not cmp_ok then
   return
 end
 
-local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
-if not lsp_status_ok then
-  return
-end
-
 local win_ok, win = pcall(require, "lspconfig.ui.windows")
 if not win_ok then
   return
@@ -37,29 +32,30 @@ local _default_opts = win.default_opts
 
 nlspsettings.setup()
 
+local border = {
+  { "╭", "NormalFloat" },
+  { "─", "NormalFloat" },
+  { "╮", "NormalFloat" },
+  { "│", "NormalFloat" },
+  { "╯", "NormalFloat" },
+  { "─", "NormalFloat" },
+  { "╰", "NormalFloat" },
+  { "│", "NormalFloat" },
+}
+
 -- round some of the window borders
 win.default_opts = function(options)
   local opts = _default_opts(options)
-  opts.border = "rounded"
+  opts.border = border
   return opts
 end
-
--- statusline progress setup
-lsp_status.config({
-  current_function = false,
-  show_filename = false,
-  diagnostics = false,
-  status_symbol = "",
-  select_symbol = nil,
-  update_interval = 200,
-})
 
 -- completion setup
 cmp.setup({
   snippet = {
     expand = function(args)
       -- vim.fn["vsnip#anonymous"](args.body)
-      require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+      require("luasnip").lsp_expand(args.body)
       -- vim.fn["UltiSnips#Anon"](args.body)
     end,
   },
@@ -74,28 +70,35 @@ cmp.setup({
   },
   sources = {
     { name = "nvim_lsp" },
-    { name = "luasnip" },
-    -- { name = "ultisnips" },
-    -- { name = "vsnip" },
     { name = "buffer" },
     { name = "path" },
+    -- { name = "vsnip" },
+    { name = "luasnip" },
+    -- { name = "ultisnips" },
   },
 })
 
 -- function to attach completion when setting up lsp
 local on_attach = function(client)
-  lsp_status.register_progress()
-  lsp_status.on_attach(client)
-  utils.bufmap("n", "ga", "lua vim.lsp.buf.code_action()")
-  utils.bufmap("n", "gD", "lua vim.lsp.buf.declaration()")
-  utils.bufmap("n", "gd", "lua vim.lsp.buf.definition()")
-  utils.bufmap("n", "ge", "lua vim.lsp.diagnostic.goto_next()")
-  utils.bufmap("n", "gE", "lua vim.lsp.diagnostic.goto_prev()")
-  utils.bufmap("n", "gi", "lua vim.lsp.buf.implementation()")
-  utils.bufmap("n", "gr", "lua vim.lsp.buf.references()")
-  utils.bufmap("n", "K", "lua vim.lsp.buf.hover()")
-  utils.bufmap("n", "gl", "lua vim.lsp.diagnostic.show_line_diagnostics()")
+  -- utils.bufmap("n", "ga", "lua vim.lsp.buf.code_action()")
+  -- utils.bufmap("n", "gd", "lua vim.lsp.buf.definition()")
+  -- utils.bufmap("n", "gr", "lua vim.lsp.buf.references()")
+  -- utils.bufmap("n", "K", "lua vim.lsp.buf.hover()")
+  -- utils.bufmap("n", "gl", "lua vim.lsp.diagnostic.show_line_diagnostics()")
 end
+
+local handlers = {
+  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = border,
+  }),
+  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+    border = border,
+  }),
+}
+
+-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 -- Provide settings first!
 lsp_installer.settings({
@@ -110,24 +113,28 @@ lsp_installer.settings({
 lsp_installer.on_server_ready(function(server)
   local opts = {
     on_attach = on_attach,
-    capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    handlers = handlers,
+    capabilities = capabilities,
     flags = { debounce_text_changes = 150 },
   }
   server:setup(opts)
 end)
 
 -- diagnostics
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
 vim.diagnostic.config({
   virtual_text = false,
   underline = true,
   float = {
+    border = border,
     source = "always",
   },
   severity_sort = true,
-  --[[ virtual_text = {
-      prefix = "»",
-      spacing = 4,
-    }, ]]
-  signs = true,
+  signs = false,
   update_in_insert = false,
 })
