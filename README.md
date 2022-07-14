@@ -23,7 +23,8 @@ export NVIM_CONFIG="${NVIM_CONFIG:-${HOME}/.config/nvim-code}"
 mv ${HOME}/.config/nvim ${HOME}/.config/nvim.bak
 ln -sf ${NVIM_CONFIG} ${HOME}/.config/nvim
 exec nvim -u "${NVIM_CONFIG}/init.lua" "$@"
-``
+```
+
 `chmod +x ~/.local/bin/nvim-code`
 
 ### run linker script
