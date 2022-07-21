@@ -9,4 +9,4 @@ require("_kommentary")
 require("_terminal")
 require("_whichkey")
 
-vim.cmd("colorscheme walh-default")
+vim.cmd("colorscheme walh-default-legacy")
